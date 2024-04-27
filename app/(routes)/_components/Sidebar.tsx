@@ -6,6 +6,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation'
 import React from 'react'
+import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
+import { Button } from '@/components/ui/button';
+
+
 
 const Sidebar = () => {
 
@@ -18,6 +22,8 @@ const Sidebar = () => {
             </Link>
 
             <nav className='h-full flex-col justify-between md:flex gap-3 mt-8'>
+                
+                <SignedIn>
                 <ul className='hidden md:flex w-full flex-col items-start gap-4'>
                     {navLinks.slice(0,6).map((link)=>{
                         const isActive= link.route===pathname;
@@ -74,7 +80,23 @@ const Sidebar = () => {
 
                     })}
 
+                    <li className='flex items-center justify-center cursor-pointer p-2 gap-4'>
+                        <UserButton afterSignOutUrl='/'  showName/>
+                    </li>
+
                 </ul>
+
+                </SignedIn>
+
+
+            <SignedOut>
+                <Button>
+                    <Link href="/sign-in">Login</Link>
+                </Button>
+
+                
+            </SignedOut>
+                
             </nav>
         </div>
     </aside>
