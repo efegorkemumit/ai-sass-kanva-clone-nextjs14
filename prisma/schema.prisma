@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+
+
+model Image {
+  id  String @id @default(auto()) @map("_id")  @db.ObjectId
+  title              String
+  transformationType String
+  publicId           String
+  secureURL          String
+  width              Int?
+  height             Int?
+  config             Json?
+  transformationUrl  String?
+  aspectRatio        String?
+  color              String?
+  prompt             String?
+  author             User        @relation(fields: [authorId], references: [id])
+  authorId           String      @db.ObjectId
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+
+  @@index([authorId])
+  
+}
+
+
+model Transaction {
+  id  String @id @default(auto()) @map("_id")  @db.ObjectId
+  createdAt   DateTime    @default(now())
+  stripeId    String      @unique
+  amount      Int
+  plan        String?
+  credits     Int?
+  buyer       User        @relation(fields: [buyerId], references: [id])
+  buyerId     String      @db.ObjectId
+  @@index([buyerId])
+
+}
+
+
+
+model User {
+  id  String @id @default(auto()) @map("_id")  @db.ObjectId
+  clerkId        String      @unique
+  email          String      @unique
+  username       String      @unique
+  photo          String
+  firstName      String?
+  lastName       String?
+  planId         Int         @default(1)
+  creditBalance  Int         @default(10)
+  images         Image[]
+  transactions   Transaction[]
+
+
+}
+
