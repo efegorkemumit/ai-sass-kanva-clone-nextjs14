@@ -1,4 +1,4 @@
-import { FiHome, FiImage, FiStar, FiScissors, FiFilter, FiCamera, FiUser, FiShoppingBag } from 'react-icons/fi';
+import { FiHome, FiImage, FiStar, FiScissors, FiMinus, FiFilter, FiCamera, FiUser, FiShoppingBag } from 'react-icons/fi';
 
 export const navLinks = [
   {
@@ -42,3 +42,57 @@ export const navLinks = [
     icon: FiShoppingBag,
   },
 ];
+
+
+export const defaultValues = {
+  title: "",
+  aspectRatio: "",
+  color: "",
+  prompt: "",
+  publicId: "",
+};
+
+export const creditFee = -1;
+
+export const transformationTypes = {
+  restore: {
+    type: "restore",
+    title: "Restore Image",
+    subTitle: "Refine images by removing noise and imperfections",
+    config: { restore: true },
+    icon: FiImage,
+  },
+  removeBackground: {
+    type: "removeBackground",
+    title: "Background Remove",
+    subTitle: "Removes the background of the image using AI",
+    config: { removeBackground: true },
+    icon: FiCamera,
+  },
+  fill: {
+    type: "fill",
+    title: "Generative Fill",
+    subTitle: "Enhance an image's dimensions using AI outpainting",
+    config: { fillBackground: true },
+    icon: FiStar,
+  },
+  remove: {
+    type: "remove",
+    title: "Object Remove",
+    subTitle: "Identify and eliminate objects from images",
+    config: {
+      remove: { prompt: "", removeShadow: true, multiple: true },
+    },
+    icon: FiMinus,
+  },
+  recolor: {
+    type: "recolor",
+    title: "Object Recolor",
+    subTitle: "Identify and recolor objects from the image",
+    config: {
+      recolor: { prompt: "", to: "", multiple: true },
+    },
+    icon: FiFilter,
+  },
+};
+
