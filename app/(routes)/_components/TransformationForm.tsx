@@ -28,6 +28,7 @@ import {
     SelectValue,
   } from "@/components/ui/select"
 import { AspectRatioKey } from '@/lib/utils'
+import MediaUpload from './MediaUpload'
 
 
 export const formSchema = z.object({
@@ -45,6 +46,8 @@ const TransformationForm = ({action,creditBalance,type,userId,
         const router = useRouter();
         const [isPending, startTransition] = useTransition()
         const [isTransforming, setIsTransforming] = useState(false);
+
+        const [image, setImage] = useState(data);
 
         const [transformationConfig, setTransformationConfig] = useState(config)
         const [newTransformation, setNewTransformation] = useState<Transformations | null>(null);
@@ -174,6 +177,27 @@ const TransformationForm = ({action,creditBalance,type,userId,
 
 
              )}
+
+        <CustomField
+                control={form.control}
+                name="publicId"
+                className='flex flex-col'
+                render={({field})=>(
+                  <MediaUpload
+                  image={image}
+                  publicId={field.value}
+                  onValueChange={field.onChange}
+                  type={type}
+                  setImage={setImage}
+                  
+                  />
+                    
+
+                )}
+                />
+
+
+
 
         <div className='flex flex-col gap-3'>
             <Button type='button'
