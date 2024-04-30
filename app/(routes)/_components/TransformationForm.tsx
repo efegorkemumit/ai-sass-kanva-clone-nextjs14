@@ -29,6 +29,7 @@ import {
   } from "@/components/ui/select"
 import { AspectRatioKey } from '@/lib/utils'
 import MediaUpload from './MediaUpload'
+import TransformedImage from './TransformedImage'
 
 
 export const formSchema = z.object({
@@ -178,7 +179,8 @@ const TransformationForm = ({action,creditBalance,type,userId,
 
              )}
 
-        <CustomField
+<div className='grid h-fit grid-cols-1 md:grid-cols-2 gap-4 py-2 px-2 min-h-48'>
+              <CustomField
                 control={form.control}
                 name="publicId"
                 className='flex flex-col'
@@ -196,7 +198,16 @@ const TransformationForm = ({action,creditBalance,type,userId,
                 )}
                 />
 
+                <TransformedImage
+                image={image}
+                isTransforming={isTransforming}
+                title={form.getValues().title}
+                transformationConfig={transformationConfig}
+                type={type}
+                setIsTransforming={setIsTransforming}
+                />
 
+</div>
 
 
         <div className='flex flex-col gap-3'>

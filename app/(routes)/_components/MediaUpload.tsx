@@ -4,6 +4,7 @@ import React from 'react'
 import { CldImage, CldUploadWidget } from 'next-cloudinary';
 import { useToast } from '@/components/ui/use-toast';
 import { FcAddImage } from 'react-icons/fc';
+import { getImageSize } from '@/lib/utils';
 
 type MediaUploadProps={
     onValueChange:(value:string)=>void;
@@ -68,8 +69,8 @@ const MediaUpload = ({image,onValueChange,publicId,setImage,type}:MediaUploadPro
                         <>
                         <div className=''>
                         <CldImage
-                            width="600"
-                            height="600"
+                            width={getImageSize(type,image,"width")}
+                            height={getImageSize(type,image,"height")}
                             src={publicId}
                             alt='image'
                             
