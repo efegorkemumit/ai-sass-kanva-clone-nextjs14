@@ -1,12 +1,12 @@
 'use client'
 
 import { TransformationFormProps, Transformations } from '@/types'
-import React, { useState, useTransition } from 'react'
+import React, { useEffect, useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from 'next/navigation'
-import { aspectRatioOptions, creditFee, defaultValues } from '@/constans'
+import { aspectRatioOptions, creditFee, defaultValues, transformationTypes } from '@/constans'
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -27,7 +27,7 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select"
-import { AspectRatioKey } from '@/lib/utils'
+import { AspectRatioKey, debounce, deepMergeObjects } from '@/lib/utils'
 import MediaUpload from './MediaUpload'
 import TransformedImage from './TransformedImage'
 
@@ -49,6 +49,7 @@ const TransformationForm = ({action,creditBalance,type,userId,
         const [isTransforming, setIsTransforming] = useState(false);
 
         const [image, setImage] = useState(data);
+        const transformationType = transformationTypes[type];
 
         const [transformationConfig, setTransformationConfig] = useState(config)
         const [newTransformation, setNewTransformation] = useState<Transformations | null>(null);
@@ -80,18 +81,51 @@ const TransformationForm = ({action,creditBalance,type,userId,
 
             setIsTransforming(true)
 
+            setTransformationConfig(
+              deepMergeObjects(newTransformation, transformationConfig)
+            )
+
             setNewTransformation(null)
 
         }
 
         const onSelectFieldHandler = (value:string, onChangeField:(value:string)=>void)=>{
 
+          const imageSize = aspectRatioOptions[value as AspectRatioKey];
+  
+          setImage((prevState: any) => ({
+              ...prevState,
+              aspectRatio: imageSize.aspectRatio,
+              width: imageSize.width,
+              height: imageSize.height,
+          }));
+          
+          setNewTransformation(transformationType.config);
+
+          return onChangeField(value)
+
 
         }
 
-        const onInputChangeHanle =()=>{
+        const onInputChangeHanler =(fieldName: string, value:string, type:string, onChangeField:(value:string)=>void)=>{
+            debounce(()=>{
+              setNewTransformation((prevState:any)=>({
+                ...prevState,
+                [type]:{
+                  ...prevState?.[type],
+                  [fieldName==="prompt" ? 'prompt': 'to']:value
+                }
+              }))
+            },2000)();
 
+            return onChangeField(value)
         }
+
+        useEffect(()=>{
+          if(image &&(type==="restore" || type ==="zoompan")){
+            setNewTransformation(transformationType.config)
+          }
+        },[image, transformationType.config, type])
     
 
 
@@ -124,12 +158,11 @@ const TransformationForm = ({action,creditBalance,type,userId,
               <SelectValue placeholder="Select Size" />
             </SelectTrigger>
             <SelectContent>
-            {Object.keys(aspectRatioOptions).map((key)=>(
-                    <SelectItem key={key} value={key}>
-                        {aspectRatioOptions[key as AspectRatioKey].label}
+            {Object.keys(aspectRatioOptions).map((key) => (
+                    <SelectItem key={key} value={key} className="select-item">
+                      {aspectRatioOptions[key as AspectRatioKey].label}
                     </SelectItem>
-
-            ))}
+                  ))}
             </SelectContent>
           </Select>
 
@@ -152,7 +185,9 @@ const TransformationForm = ({action,creditBalance,type,userId,
                 <Input
                 value={field.value}
                 className=''
-                onChange={(e)=>onInputChangeHanler()}
+                onChange={(e)=>onInputChangeHanler('prompt', e.target.value,
+                  type, field.onChange
+                )}
                 
                 />
             )}
@@ -170,7 +205,9 @@ const TransformationForm = ({action,creditBalance,type,userId,
                     <Input
                     value={field.value}
                     className=''
-                    onChange={(e)=>onInputChangeHanler()}
+                    onChange={(e)=>onInputChangeHanler('color', e.target.value,
+                    'recolor', field.onChange
+                  )}
                     
                     />
                 )}

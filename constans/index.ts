@@ -27,8 +27,8 @@ export const navLinks = [
     icon: FiFilter,
   },
   {
-    label: "Background Remove",
-    route: "/transformations/add/removeBackground",
+    label: "Zoompan",
+    route: "/transformations/add/zoompan",
     icon: FiCamera,
   },
   {
@@ -62,11 +62,11 @@ export const transformationTypes = {
     config: { restore: true },
     icon: FiImage,
   },
-  removeBackground: {
-    type: "removeBackground",
-    title: "Background Remove",
-    subTitle: "Removes the background of the image using AI",
-    config: { removeBackground: true },
+  zoompan: {
+    type: "zoompan",
+    title: "zoomPan",
+    subTitle: "zoomPan of the image using AI",
+    config: { zoompan: true },
     icon: FiCamera,
   },
   fill: {

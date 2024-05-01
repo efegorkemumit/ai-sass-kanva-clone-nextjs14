@@ -11,28 +11,12 @@ const TransformedImage = ({image,isTransforming,title,
     transformationConfig, type,hasDownload,setIsTransforming
 }:TransformedImageProps) => {
 
-    const downloadHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
-        e.preventDefault();
-
-        download(getCldImageUrl({
-            width:image?.width,
-            height:image?.height,
-            src: image?.publicId,
-            ...transformations
-        }), title)
-
-    }
+  
   return (
     <div className='flex flex-col gap-4'>
         <h3 className='font-semibold'>Transformed</h3>
 
-        {hasDownload && (
-            <Button onClick={downloadHandler}>
-                <Image className='text-5xl'/>
-
-            </Button>
-
-        )}
+     
 
        {image?.publicId && transformationConfig? (
        <>

@@ -5,7 +5,7 @@ declare type TransformationTypeKey =
   | "fill"
   | "remove"
   | "recolor"
-  | "removeBackground";
+  | "zoompan";
 
 declare type Transformations = {
     restore?: boolean;
@@ -20,7 +20,7 @@ declare type Transformations = {
       to: string;
       multiple?: boolean;
     };
-    removeBackground?: boolean;
+    zoompan?: boolean;
   };
 
 
