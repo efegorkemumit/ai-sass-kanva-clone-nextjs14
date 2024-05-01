@@ -30,6 +30,9 @@ import {
 import { AspectRatioKey, debounce, deepMergeObjects } from '@/lib/utils'
 import MediaUpload from './MediaUpload'
 import TransformedImage from './TransformedImage'
+import { updateCredits } from '@/actions/user'
+import { getCldImageUrl } from 'next-cloudinary'
+import { AddImage } from '@/actions/image'
 
 
 export const formSchema = z.object({
@@ -73,6 +76,47 @@ const TransformationForm = ({action,creditBalance,type,userId,
         async function onSubmit(values:z.infer<typeof formSchema>) {
             setIsSubmitting(true);
 
+            if(data || image){
+              const transformationUrl = getCldImageUrl({
+                width: image?.width,
+                height: image?.height,
+                src: image?.publicId,
+                ...transformationConfig
+              })
+
+              const imageData = {
+                title: values.title,
+                publicId: image?.publicId,
+                transformationType: type,
+                width: image?.width,
+                height: image?.height,
+                config: transformationConfig,
+                secureURL: image?.secureURL,
+                transformationUrl: transformationUrl,
+                aspectRatio: values.aspectRatio,
+                prompt: values.prompt,
+                color: values.color,
+              }
+
+              if(action==="Add"){
+
+                try {
+                  const newImage = await AddImage({imageData, userId})
+
+                  if(newImage){
+                    form.reset();
+                    router.push(`/transformations/${newImage.id}`)
+                  }
+                  
+                } catch (error) {
+                  console.log(error)
+                  
+                }
+              }
+
+
+            }
+
             setIsSubmitting(false);
             
         }
@@ -86,6 +130,10 @@ const TransformationForm = ({action,creditBalance,type,userId,
             )
 
             setNewTransformation(null)
+
+            startTransition(async()=>[
+              await updateCredits(userId,creditFee)
+            ])
 
         }
 
