@@ -84,3 +84,21 @@ export const deepMergeObjects = (obj1: any, obj2: any) => {
 
   return output; // Birleştirilmiş nesneyi döndür
 };
+
+
+const shimmer = (w, h) => `
+<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g">
+      <stop stop-color="#7986AC" offset="20%" />
+      <stop stop-color="#68769e" offset="50%" />
+      <stop stop-color="#7986AC" offset="70%" />
+    </linearGradient>
+  </defs>
+  <rect width="${w}" height="${h}" fill="#7986AC" />
+  <rect width="${w}" height="${h}" fill="url(#g)" />
+  <animate attributeName="x" from="-${w}" to="${w}" dur="1s" repeatCount="indefinite"  />
+</svg>`;
+
+export const dataUrl = `data:image/svg+xml;base64,${btoa(shimmer(1000, 1000))}`;
+

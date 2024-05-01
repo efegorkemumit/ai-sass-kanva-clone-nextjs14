@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { debounce, download, getImageSize } from '@/lib/utils';
+import { dataUrl, debounce, download, getImageSize } from '@/lib/utils';
 import { TransformedImageProps } from '@/types'
 import { Image, LoaderIcon } from 'lucide-react';
 import { CldImage, getCldImageUrl } from 'next-cloudinary';
@@ -25,6 +25,7 @@ const TransformedImage = ({image,isTransforming,title,
         <CldImage
             width={getImageSize(type, image, "width")}
             height={getImageSize(type, image, "height")}
+            placeholder={dataUrl as PlaceholderValue}
             src={image?.publicId}
             alt={image.title}
             onLoad={()=>{
