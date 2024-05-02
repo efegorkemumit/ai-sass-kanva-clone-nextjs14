@@ -32,7 +32,7 @@ import MediaUpload from './MediaUpload'
 import TransformedImage from './TransformedImage'
 import { updateCredits } from '@/actions/user'
 import { getCldImageUrl } from 'next-cloudinary'
-import { AddImage } from '@/actions/image'
+import { AddImage, UpdateImage } from '@/actions/image'
 
 
 export const formSchema = z.object({
@@ -112,6 +112,24 @@ const TransformationForm = ({action,creditBalance,type,userId,
                   console.log(error)
                   
                 }
+              }
+
+              if(action==="Update"){
+
+                try {
+
+                  const updateImage = await UpdateImage({imageData, userId, id:image?.id})
+                  if(updateImage){
+                    form.reset();
+                    router.push(`/transformations/${updateImage.id}`)
+                  }
+                  
+                } catch (error) {
+                  console.log(error)
+                  
+                }
+
+
               }
 
 

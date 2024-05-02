@@ -45,7 +45,7 @@ declare type TransformationFormProps = {
 
   
 declare type AddImageParams = {
-  image: {
+  imageData: {
     title: string;
     publicId: string;
     transformationType: string;
@@ -59,6 +59,24 @@ declare type AddImageParams = {
     color: string | undefined;
   };
   userId: string;
+};
+
+declare type UpdateImageParams = {
+  imageData: {
+    title: string;
+    publicId: string;
+    transformationType: string;
+    width: number;
+    height: number;
+    config: any;
+    secureURL: string;
+    transformationUrl: string;
+    aspectRatio: string | undefined;
+    prompt: string | undefined;
+    color: string | undefined;
+  };
+  userId: string;
+  id:string;
 };
 
 

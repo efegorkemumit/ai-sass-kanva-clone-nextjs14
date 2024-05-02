@@ -1,7 +1,7 @@
 "use server"
 
 import { prismadb } from "@/lib/db"
-import { AddImageParams } from "@/types"
+import { AddImageParams, UpdateImageParams } from "@/types"
 
 
 export const AddImage = async({imageData, userId}:AddImageParams)=>{
@@ -29,6 +29,36 @@ export const AddImage = async({imageData, userId}:AddImageParams)=>{
 
 
 }
+
+export const UpdateImage = async({imageData, userId,id}:UpdateImageParams)=>{
+
+    const user = await prismadb.user.findUnique({
+        where:{
+            id:userId
+        }
+    })
+
+    if(!user){
+        throw new Error("User not found");
+    }
+
+    const newImage = await prismadb.image.update({
+        where:{
+            id:id
+        },
+        data:{
+            ...imageData,
+            authorId:userId
+                        
+        }
+    })
+
+    return JSON.parse(JSON.stringify(newImage));
+
+
+
+}
+
 
 export const getByImageId = async(imageId:string)=>{
 
