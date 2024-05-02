@@ -7,16 +7,19 @@ import React from 'react'
 import HeaderLabel from '../_components/HeaderLabel'
 import { FcEditImage } from "react-icons/fc";
 import { FaCoins } from "react-icons/fa";
+import Collection from '../_components/Collection/Collection'
+import { getUserImages } from '@/actions/image'
+import { SearchParamProps } from '@/types'
 
-const ProfilePage = async() => {
+const ProfilePage = async({searchParams}:SearchParamProps) => {
+  const page= Number(searchParams?.page)|| 1;
+
 
   const {userId} = auth()
-
   if(!userId) redirect("/sign-in");
-
   const user = await getByUserId(userId);
+  const images = await getUserImages({page,userId:user.id})
 
-  console.log(user)
 
   return (
   <>
@@ -38,7 +41,7 @@ const ProfilePage = async() => {
       <p className='text-2xl font-semibold'>IMAGE MANIPULATION</p>
       <div className='mt-4 flex items-center gap-4'>
         <FcEditImage className='text-5xl'/>
-        <h2 className='font-semibold text-2xl text-slate-700'>   / //</h2>
+        <h2 className='font-semibold text-2xl text-slate-700'>  {images?.data.length}</h2>
 
       </div>
 
@@ -47,6 +50,17 @@ const ProfilePage = async() => {
 
 
   </section>
+
+  <section className="mt-24 md:mt-12">
+    <Collection
+    images={images?.data}
+    totalPages={images.totalPage}
+    page={page}
+    />
+    
+
+
+   </section>
   
   
   </>

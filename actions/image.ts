@@ -50,3 +50,73 @@ export const deleteImage = async(imageId:string)=>{
 
     return deleteImage;
 }
+
+
+export async function getAllImages({limit=8, page=1}:
+    {
+        limit?:number;
+        page:number
+    }) 
+{
+    try {
+        const skipAmmount = (page-1)* limit;
+
+        const images =  await prismadb.image.findMany({
+            orderBy:{updatedAt:'desc'},
+            skip:skipAmmount,
+            take:limit,
+            include:{author:true}
+
+        })
+
+        const totalImages = await prismadb.image.count();
+
+        const totalPage = Math.ceil(totalImages/limit);
+
+        return{data:images, totalPage, savedImages: totalImages}
+        
+    } catch (error) {
+
+        console.error('Error fetching images:', error);
+        throw new Error('Error fetching images');
+  
+        
+    }
+    
+}
+
+export async function getUserImages({limit=8, page=1, userId}:
+    {
+        limit?:number;
+        page:number;
+        userId:string
+    }) 
+{
+    try {
+        const skipAmmount = (page-1)* limit;
+
+        const images =  await prismadb.image.findMany({
+            where:{authorId:userId},
+            orderBy:{updatedAt:'desc'},
+            skip:skipAmmount,
+            take:limit,
+            include:{author:true}
+
+        })
+
+        const totalImages = await prismadb.image.count();
+
+        const totalPage = Math.ceil(totalImages/limit);
+
+        return{data:images, totalPage, savedImages: totalImages}
+        
+    } catch (error) {
+
+        console.error('Error fetching images:', error);
+        throw new Error('Error fetching images');
+  
+        
+    }
+    
+}
+

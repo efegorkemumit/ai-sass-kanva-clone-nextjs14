@@ -102,3 +102,9 @@ const shimmer = (w, h) => `
 
 export const dataUrl = `data:image/svg+xml;base64,${btoa(shimmer(1000, 1000))}`;
 
+export const updateUrlQuery = (key, value) => {
+  const currentSearchParams = new URLSearchParams(window.location.search);
+  currentSearchParams.set(key, value);
+  const newUrl = `${window.location.pathname}?${currentSearchParams.toString()}`;
+  return newUrl;
+};
