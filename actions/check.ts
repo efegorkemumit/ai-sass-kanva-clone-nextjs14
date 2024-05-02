@@ -48,7 +48,6 @@ export async function createTransaction(transaction:CreateTransactionParams) {
         const  newTransaction = await prismadb.transaction.create({
             data:{
                 ...transaction,
-                buyer:transaction.buyerId
             }
         })
     
