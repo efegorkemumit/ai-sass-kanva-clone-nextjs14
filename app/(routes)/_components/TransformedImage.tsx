@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@/components/ui/button';
 import { dataUrl, debounce, download, getImageSize } from '@/lib/utils';
 import { TransformedImageProps } from '@/types'
@@ -11,11 +13,24 @@ const TransformedImage = ({image,isTransforming,title,
     transformationConfig, type,hasDownload,setIsTransforming
 }:TransformedImageProps) => {
 
+    const downloadHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault();
+    
+        download(getCldImageUrl({
+          width: image?.width,
+          height: image?.height,
+          src: image?.publicId,
+          ...transformationConfig
+        }), title)
+      }
+    
+
   
   return (
-    <div className='flex flex-col gap-4'>
+    <div className='flex flex-col gap-4 relative'>
         <h3 className='font-semibold'>Transformed</h3>
 
+    
      
 
        {image?.publicId && transformationConfig? (
@@ -43,6 +58,12 @@ const TransformedImage = ({image,isTransforming,title,
         
         
         />
+
+{hasDownload &&(
+            <Button onClick={downloadHandler} className='absolute inset-0 flex items-center justify-center w-full h-full opacity-0 hover:opacity-80'>
+                Download
+            </Button>
+        )}
 
             {isTransforming &&(
                 <div className=''>

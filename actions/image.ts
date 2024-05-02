@@ -12,7 +12,7 @@ export const AddImage = async({imageData, userId}:AddImageParams)=>{
         }
     })
 
-    if(!userId){
+    if(!user){
         throw new Error("User not found");
     }
 
@@ -28,4 +28,25 @@ export const AddImage = async({imageData, userId}:AddImageParams)=>{
 
 
 
+}
+
+export const getByImageId = async(imageId:string)=>{
+
+    const image = await prismadb.image.findUnique({
+        where:{
+            id:imageId
+        }
+    })
+
+    return image
+}
+
+export const deleteImage = async(imageId:string)=>{
+    const deleteImage = await prismadb.image.delete({
+        where:{
+            id:imageId
+        }
+    })
+
+    return deleteImage;
 }
