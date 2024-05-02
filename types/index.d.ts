@@ -84,3 +84,10 @@ declare type SearchParamProps = {
   params: { id: string; type: TransformationTypeKey };
   searchParams: { [key: string]: string | string[] | undefined };
 };
+
+declare type CheckoutTransactionParams = {
+  plan: string;
+  credits: number;
+  amount: number;
+  buyerId: string;
+};
